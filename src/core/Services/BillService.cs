@@ -32,7 +32,7 @@ namespace core.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<DtoBill> GetClientById(int id)
+        public async Task<DtoBill> GetBillById(int id)
         {
             DtoBill bill = await _billRepository.GetBill().AsNoTracking().Where(c => c.Id == id).ProjectTo<DtoBill>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
             return bill;
@@ -42,7 +42,7 @@ namespace core.Services
         /// Get All Bill 
         /// </summary>
         /// <returns></returns>
-        public async Task<PagedList<DtoBill>> GetAllClients(DtoFilterPagedList pagedListParams)
+        public async Task<PagedList<DtoBill>> GetAllBills(DtoFilterPagedList pagedListParams)
         {
             //Servicio con paginacion en servidor
 
@@ -67,7 +67,7 @@ namespace core.Services
         /// </summary>
         /// <param name="idUser"></param>
         /// <returns></returns>
-        public async Task<int?> CreateClient(DtoBillCreate data)
+        public async Task<int?> CreateBill(DtoBillCreate data)
         {
             int? result = null;
 
@@ -86,7 +86,7 @@ namespace core.Services
         /// </summary>
         /// <param name="idUser"></param>
         /// <returns></returns>
-        public async Task<int?> UpdateClient(DtoBillUpdate data)
+        public async Task<int?> UpdateBill(DtoBillUpdate data)
         {
             int? result = null;
 
@@ -110,7 +110,7 @@ namespace core.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task RemoveClient(int id)
+        public async Task RemoveBill(int id)
         {
             var entity = await _billRepository.GetBill().IgnoreQueryFilters().Where(c => c.Id == id).FirstOrDefaultAsync();
 

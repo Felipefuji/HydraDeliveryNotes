@@ -6,7 +6,6 @@ namespace core.Interfaces.Services
 {
     public interface IBillService
     {
-        #region Actions
         /// <summary>
         /// Get Bill by Id
         /// </summary>
