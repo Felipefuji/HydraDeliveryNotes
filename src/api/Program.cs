@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
-string connString = builder.Configuration.GetConnectionString("LocalDB");
+var connString = builder.Configuration.GetConnectionString("LocalDB");
 
 // Add services to the container.
 
