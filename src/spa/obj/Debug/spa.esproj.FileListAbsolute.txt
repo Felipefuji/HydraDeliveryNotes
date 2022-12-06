@@ -1,2 +1,0 @@
-D:\Proyectos\Repositorio\GitHub\HydraDeliveryNotes\src\spa\obj\Debug\spa.esproj.SuggestedBindingRedirects.cache
-D:\Proyectos\Repositorio\GitHub\HydraDeliveryNotes\src\spa\obj\Debug\spa.esproj.CoreCompileInputs.cache
