@@ -2,6 +2,7 @@
 using core.DTO.Helpers;
 using core.Helpers;
 using core.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
