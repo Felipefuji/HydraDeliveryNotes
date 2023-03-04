@@ -8,10 +8,10 @@ function login(username: string, password: string) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ email: username, password: password })
     };
 
-    return fetch(`auth/signin`, requestOptions)
+    return fetch(`api/auth/signin`, requestOptions)
         .then(handleResponse)
         .then(user => {
             // login successful if there's a jwt token in the response

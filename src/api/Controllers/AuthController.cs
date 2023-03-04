@@ -11,19 +11,16 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace api.Controllers
-{
+namespace api.Controllers {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
-    {
+    public class AuthController : ControllerBase {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
         private readonly JwtSettings _jwtSettings;
         private readonly IMapper _mapper;
 
-        public AuthController(IMapper mapper, UserManager<User> userManager, RoleManager<Role> roleManager, IOptionsSnapshot<JwtSettings> jwtSettings)
-        {
+        public AuthController(IMapper mapper, UserManager<User> userManager, RoleManager<Role> roleManager, IOptionsSnapshot<JwtSettings> jwtSettings) {
             _mapper = mapper;
             _userManager = userManager;
             _roleManager = roleManager;
@@ -31,14 +28,12 @@ namespace api.Controllers
         }
 
         [HttpPost("SignUp")]
-        public async Task<IActionResult> SignUp(DtoUser userSignUpResource)
-        {
+        public async Task<IActionResult> SignUp(DtoUser userSignUpResource) {
             var user = _mapper.Map<DtoUser, User>(userSignUpResource);
 
             var userCreateResult = await _userManager.CreateAsync(user, userSignUpResource.Password);
 
-            if (userCreateResult.Succeeded)
-            {
+            if (userCreateResult.Succeeded) {
                 return Created(string.Empty, string.Empty);
             }
 
@@ -46,18 +41,15 @@ namespace api.Controllers
         }
 
         [HttpPost("SignIn")]
-        public async Task<IActionResult> SignIn(DtoUserLogin userLoginResource)
-        {
+        public async Task<IActionResult> SignIn(DtoUserLogin userLoginResource) {
             var user = _userManager.Users.SingleOrDefault(u => u.UserName == userLoginResource.Email);
-            if (user is null)
-            {
+            if (user is null) {
                 return NotFound("User not found");
             }
 
             var userSigninResult = await _userManager.CheckPasswordAsync(user, userLoginResource.Password);
 
-            if (userSigninResult)
-            {
+            if (userSigninResult) {
                 var roles = await _userManager.GetRolesAsync(user);
                 return Ok(GenerateJwt(user, roles));
             }
@@ -66,22 +58,18 @@ namespace api.Controllers
         }
 
         [HttpPost("Roles")]
-        public async Task<IActionResult> CreateRole(string roleName)
-        {
-            if (string.IsNullOrWhiteSpace(roleName))
-            {
+        public async Task<IActionResult> CreateRole(string roleName) {
+            if (string.IsNullOrWhiteSpace(roleName)) {
                 return BadRequest("Role name should be provided.");
             }
 
-            var newRole = new Role
-            {
+            var newRole = new Role {
                 Name = roleName
             };
 
             var roleResult = await _roleManager.CreateAsync(newRole);
 
-            if (roleResult.Succeeded)
-            {
+            if (roleResult.Succeeded) {
                 return Ok();
             }
 
@@ -89,28 +77,36 @@ namespace api.Controllers
         }
 
         [HttpPost("User/{userEmail}/Role")]
-        public async Task<IActionResult> AddUserToRole([Required] string userEmail, [Required][FromBody] string roleName)
-        {
+        public async Task<IActionResult> AddUserToRole([Required] string userEmail, [Required][FromBody] string roleName) {
             var user = _userManager.Users.SingleOrDefault(u => u.UserName == userEmail);
 
-            if(user == null)
-            {
+            if (user == null) {
                 return NotFound("User not found");
             }
 
             var result = await _userManager.AddToRoleAsync(user, roleName);
 
-            if (result.Succeeded)
-            {
+            if (result.Succeeded) {
                 return Ok();
             }
 
             return Problem(result.Errors.First().Description, null, 500);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Me([Required] string userEmail) {
+            var user = _userManager.Users.SingleOrDefault(u => u.UserName == userEmail);
+
+            if (user == null) 
+            {
+                return NotFound("User not found");
+            }
+
+            return Ok(user);
+        }
+
         #region Private Method
-        private string GenerateJwt(User user, IList<string> roles)
-        {
+        private string GenerateJwt(User user, IList<string> roles) {
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
