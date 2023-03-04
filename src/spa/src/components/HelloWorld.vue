@@ -31,7 +31,10 @@
     import { defineComponent } from 'vue';
 
     type Forecasts = {
-        date: string
+        date: string,
+        temperatureC: string,
+        temperatureF: string,
+        summary: string,
     }[];
 
     interface Data {
