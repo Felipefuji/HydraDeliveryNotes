@@ -6,7 +6,7 @@
                 <label for="email">Email address</label>
                 <input class="form-control"
                        name="email"
-                       v-model="email"
+                       v-model="dataUserLogin.email"
                        placeholder="email@adress.com" />
             </div>
             <div class="input">
@@ -14,7 +14,7 @@
                 <input class="form-control"
                        type="password"
                        name="password"
-                       v-model="password"
+                       v-model="dataUserLogin.password"
                        placeholder="password123" />
             </div>
             <div class="alternative-option mt-4">
@@ -28,26 +28,24 @@
 </template>
 
 <script lang="ts">
+import { UserDataLogin } from '@/services/userInterfaces';
 import { userService } from '@/services/userservices';
-import { defineComponent } from 'vue';
-
-interface UserData {
-    email: string,
-    password: string
-}
+import { defineComponent, Ref, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
-    data(): UserData {
-        return {
-            email: "",
-            password: "",
-        };
-    },
-    methods: {
-        login() {
-            userService.login(this.email, this.password)
+    name: 'LoginForm',
+    setup() {  
+        const dataUserLogin: Ref<UserDataLogin> = ref({
+            email: '',
+            password: '',
+        });     
+        const router = useRouter();
+        
+        function login() {
+            userService.login(dataUserLogin.value.email, dataUserLogin.value.password)
             .then(() => {
-                this.$router.push("/dashboard");
+                router.push("/dashboard");
             })
             .catch((error: any) => {
                 const errorCode = error.code;
@@ -55,10 +53,17 @@ export default defineComponent({
                 console.log(errorCode);
                 console.log(errorMessage);
             });
-        },
-        moveToRegister() {
-            this.$router.push("/register");
-        },
+        }
+
+        function moveToRegister(){
+            router.push("/register");
+        }
+
+        return{
+            dataUserLogin,
+            login,
+            moveToRegister
+        }
     },
 });
 </script>

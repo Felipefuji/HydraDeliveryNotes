@@ -6,7 +6,7 @@
                 <label for="email">Email address</label>
                 <input class="form-control"
                        name="email"
-                       v-model="email"
+                       v-model="dataUser.email"
                        placeholder="email@adress.com" />
             </div>
             <div>
@@ -14,21 +14,21 @@
                 <input class="form-control"
                        type="password"
                        name="password"
-                       v-model="password"
+                       v-model="dataUser.password"
                        placeholder="password123" />
             </div>
             <div>
                 <label for="firstName">First Name</label>
                 <input class="form-control"
                        name="firstName"
-                       v-model="firstName"
+                       v-model="dataUser.firstName"
                        placeholder="asdf" />
             </div>
             <div>
                 <label for="lastName">Last Name</label>
                 <input class="form-control"
                        name="lastName"
-                       v-model="lastName"
+                       v-model="dataUser.lastName"
                        placeholder="asdf" />
             </div>
             <div class="alternative-option mt-4">
@@ -42,39 +42,29 @@
 </template>
 
 <script lang="ts">
+import { UserDataRegistry } from '@/services/userInterfaces';
 import { userService } from '@/services/userservices';
-import { defineComponent } from 'vue';
-
-interface Data {
-    email: string,
-    password: string,
-    firstName: string | null,
-    lastName: string | null
-}
+import { defineComponent, Ref, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
-    data(): Data {
-        return {
-            email: "",
-            password: "",
-            firstName: null,
-            lastName: null
-        };
-    },
-    methods: {
-        register() {
-            const post = {
-                email: this.email,
-                password: this.password,
-                firstName: this.firstName,
-                lastName: this.lastName
-            }
-            userService.register(post)
+    name: 'RegistryForm',
+    setup() {
+        const dataUser: Ref<UserDataRegistry> = ref({
+            email: '',
+            password: '',
+            firstName: '',
+            lastName: ''
+        });
+        const router = useRouter();
+        
+        function register() {
+            userService.register(dataUser.value)
             .then((userCredential) => {
                     const user = userCredential.user;
                     console.log(user);
                     console.log("Registration completed");
-                    this.$router.push("/");
+                    router.push("/");
             })
             .catch((error) => {
                     const errorCode = error.code;
@@ -82,10 +72,17 @@ export default defineComponent({
                     console.log(errorCode);
                     console.log(errorMessage);
                 });
-            },
-        moveToLogin() {
-            this.$router.push("/");
-        },
+        }
+
+        function moveToLogin() {
+            router.push("/");
+        }
+
+        return{
+            dataUser,
+            register,
+            moveToLogin
+        }
     },
 });
 </script>

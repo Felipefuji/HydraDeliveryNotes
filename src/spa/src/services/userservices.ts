@@ -1,14 +1,9 @@
+import { UserDataRegistry } from "./userInterfaces";
+
 export const userService = {
     login,
     logout,
     register
-};
-
-type UserDataRegistry = {
-    email: string,
-    password: string,
-    firstName: null | string,
-    lastName: null | string
 };
 
 function login(username: string, password: string) {
