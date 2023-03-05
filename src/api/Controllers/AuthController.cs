@@ -100,18 +100,6 @@ namespace api.Controllers {
             return Problem(result.Errors.First().Description, null, 500);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Me([Required] string userEmail) {
-            var user = _userManager.Users.SingleOrDefault(u => u.UserName == userEmail);
-
-            if (user == null) 
-            {
-                return NotFound("User not found");
-            }
-
-            return Ok(user);
-        }
-
         #region Private Method
         private string GenerateJwt(User user, IList<string> roles) {
             var claims = new List<Claim>
