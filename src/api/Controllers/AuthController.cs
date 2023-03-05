@@ -51,7 +51,14 @@ namespace api.Controllers {
 
             if (userSigninResult) {
                 var roles = await _userManager.GetRolesAsync(user);
-                return Ok(GenerateJwt(user, roles));
+
+                var userData = new DtoUserToken() {
+                    Email = userLoginResource.Email,
+                    Roles = roles,
+                    Token = GenerateJwt(user, roles)
+                };
+
+                return Ok(userData);
             }
 
             return BadRequest("Email or password incorrect.");

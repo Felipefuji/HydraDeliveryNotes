@@ -4,6 +4,13 @@ export const userService = {
     register
 };
 
+type UserDataRegistry = {
+    email: string,
+    password: string,
+    firstName: null | string,
+    lastName: null | string
+};
+
 function login(username: string, password: string) {
     const requestOptions = {
         method: 'POST',
@@ -29,17 +36,17 @@ function logout() {
     localStorage.removeItem('user');
 }
 
-function register(user: any) {
+function register(user: UserDataRegistry) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
     };
 
-    return fetch(`auth/signup`, requestOptions).then(handleResponse);
+    return fetch(`api/auth/signup`, requestOptions).then(handleResponse);
 }
 
-function handleResponse(response:any) {
+function handleResponse(response: any) {
     return response.text().then((text: any) => {
         const data = text && JSON.parse(text);
         if (!response.ok) {
