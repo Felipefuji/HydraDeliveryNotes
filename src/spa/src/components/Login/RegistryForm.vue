@@ -2,14 +2,14 @@
     <div class="container">
         <form @submit.prevent="register">
             <h2 class="mb-3">Register</h2>
-            <div>
+            <div class="input">
                 <label for="email">Email address</label>
                 <input class="form-control"
                        name="email"
                        v-model="dataUser.email"
                        placeholder="email@adress.com" />
             </div>
-            <div>
+            <div class="input">
                 <label for="password">Password</label>
                 <input class="form-control"
                        type="password"
@@ -17,14 +17,14 @@
                        v-model="dataUser.password"
                        placeholder="password123" />
             </div>
-            <div>
+            <div class="input">
                 <label for="firstName">First Name</label>
                 <input class="form-control"
                        name="firstName"
                        v-model="dataUser.firstName"
                        placeholder="asdf" />
             </div>
-            <div>
+            <div class="input">
                 <label for="lastName">Last Name</label>
                 <input class="form-control"
                        name="lastName"
