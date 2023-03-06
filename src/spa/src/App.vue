@@ -11,7 +11,7 @@
                 <va-icon name="search"/>
             </va-navbar-item>
             <va-navbar-item>
-                <va-icon name="account_circle"/>
+                <va-icon name="account_circle_outline"/>
             </va-navbar-item>
         </template>
     </va-navbar>
